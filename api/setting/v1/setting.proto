@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package setting.v1;
+import "google/api/annotations.proto";
+
+
+option go_package = "atta-setting/api/setting/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.setting.v1";
+option java_outer_classname = "SettingProtoV1";
+
+service Setting {
+  //read some setting
+  rpc ReadSetting (ReadSettingRequest) returns (ReadSettingReply) {
+    option (google.api.http) = {
+      get:"/setting/readSetting"
+    };
+  }
+  //write some setting
+  rpc WriteSetting (WriteSettingRequest) returns (WriteSettingReply) {
+    option (google.api.http) = {
+      post:"/setting/writeSetting"
+      body:"*"
+    };
+  };
+
+  //show some service setting list
+  rpc ShowServices (ShowServicesRequest) returns (ShowServicesReply) {
+    option (google.api.http) = {
+      get:"/setting/showServices"
+    };
+  }
+  //show some history setting for appoint service
+  rpc ShowHistoryService (ShowHistoryServiceRequest) returns (ShowHistoryServiceReply) {
+    option (google.api.http) = {
+      get:"/setting/showHistory/{app_id}"
+    };
+  }
+}
+
+message  ReadSettingRequest {
+  string app_id = 1;
+}
+
+message ReadSettingReply {
+  string config = 1;
+}
+
+message WriteSettingRequest {
+  string app_id = 1;
+  string secret = 2;
+  string config = 3;
+  string author = 4;
+  string env = 5;
+}
+message WriteSettingReply {
+
+}
+
+message ShowServicesRequest {
+
+}
+
+message ShowServicesReply {
+  repeated string app_id = 1;
+}
+
+message ShowHistoryServiceRequest {
+  string app_id = 1;
+  string author = 2;
+  string env = 3;
+  int32 page_no =4;
+  int32 page_size =5;
+}
+
+message  ShowHistoryServiceReply {
+  repeated SettingDetails history_service = 1;
+}
+
+message SettingDetails {
+  string app_id = 1;
+  string config = 2;
+  string author = 3;
+  string env = 4;
+  string create_time = 5;
+}
